@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* The printable receipt itself always uses a plain serif, black-on-white,
+   traditional-document look regardless of the app's own UI font. */
+.receipt-document {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #000;
+  background: #fff;
+}
+
+/* ----------------------------------------------------------------------
+   Print rules
+
+   Goal: when the user prints, ONLY the element with id="receipt-print-area"
+   (rendered by ReceiptPreview) should be visible on the page, sized and
+   positioned for a single A4 sheet with no extra margins.
+   ---------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Hide everything by default... */
+  body * {
+    visibility: hidden;
+  }
+
+  /* ...then reveal only the receipt and its children. */
+  #receipt-print-area,
+  #receipt-print-area * {
+    visibility: visible;
+  }
+
+  #receipt-print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

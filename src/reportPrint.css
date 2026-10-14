@@ -1,0 +1,87 @@
+/*
+ * Styles for the Doctor Incentive Report and Billing Report.
+ * Everything is scoped to #report-print-area / .report-* classes, so it has
+ * no effect on the Payment Receipt print layout.
+ */
+.report-document {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+  background: #fff;
+}
+
+@media print {
+  /* index.css hides everything except the receipt; reveal the report instead. */
+  #report-print-area,
+  #report-print-area * {
+    visibility: visible;
+  }
+
+  /*
+   * Every wrapper around the report is flattened to a plain block with no
+   * padding/background, so the report flows normally from the top of page 1
+   * and page breaks work (they are unreliable inside flex/grid containers).
+   */
+  .report-layout-reset {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .report-sheet {
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Every report after the first starts on a fresh page (no blank first page). */
+  .report-sheet + .report-sheet {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* Column headings repeat on each page of a long table. */
+  .report-table thead {
+    display: table-header-group;
+  }
+
+  /* Never cut a row across two pages. */
+  .report-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-header-block,
+  .report-meta-block {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .report-total-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
